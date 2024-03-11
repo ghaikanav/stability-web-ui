@@ -37,11 +37,16 @@ export default async function handler(
     sampler: Generation.DiffusionSampler.SAMPLER_K_DPMPP_2M,
   });
 
+  let imageUrl = "";
+
   await executeGenerationRequest(client, request, metadata)
-    .then(onGenerationComplete)
+    .then((resp) => {
+      imageUrl = onGenerationComplete(resp);
+    })
     .catch((error) => {
       console.error("Failed to make image-to-image-masking request:", error);
     });
 
-  res.status(200).json({ message: "Hello from Next.js!" });
+  console.log("response is", imageUrl);
+  res.status(200).json({ url: imageUrl });
 }

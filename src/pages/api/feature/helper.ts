@@ -273,7 +273,7 @@ export async function executeGenerationRequest(
         });
       }
     );
-    console.log("Answers: ", answers)
+    console.log("Answers: ", answers);
     return extractArtifacts(answers);
   } catch (err) {
     return err instanceof Error ? err : new Error(JSON.stringify(err));
@@ -298,13 +298,13 @@ function extractArtifacts(answers: Generation.Answer[]): GenerationArtifacts {
 }
 
 /** Generation completion handler - replace this with your own logic  */
-export function onGenerationComplete(response: GenerationResponse) {
+export function onGenerationComplete(response: GenerationResponse): string {
   if (response instanceof Error) {
     console.error("Generation failed", response);
     throw response;
   }
 
-  console.log("The reposne is ", response)
+  console.log("The response is ", response);
   console.log(
     `${response.imageArtifacts.length} image${
       response.imageArtifacts.length > 1 ? "s" : ""
@@ -320,9 +320,11 @@ export function onGenerationComplete(response: GenerationResponse) {
     );
   }
 
+  let image: string = '';
   // Do something with the successful image artifacts
   response.imageArtifacts.forEach((artifact: Generation.Artifact) => {
     try {
+      image = artifact.getBinary_asB64();
       fs.writeFileSync(
         `image-${artifact.getSeed()}.png`,
         Buffer.from(artifact.getBinary_asU8())
@@ -331,6 +333,8 @@ export function onGenerationComplete(response: GenerationResponse) {
       console.error("Failed to write resulting image to disk", error);
     }
   });
+
+  return image;
 
   // For browser implementations: you could use the `artifact.getBinary_asB64()` method to get a
   // base64 encoded string and then create a data URL from that and display it in an <img> tag.

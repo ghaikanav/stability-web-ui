@@ -1,10 +1,12 @@
 import { ChangeEvent, useState } from "react";
 import { ImageInput } from "@/components/ImageInput";
+import Image from "next/image";
 
 export const Stability = () => {
   const [inputImageUrl, setInputImageUrl] = useState<string | null>(null);
   const [maskImageUrl, setMaskImageUrl] = useState<string | null>(null);
   const [textInput, setTextInput] = useState<string>("");
+  const [outputImageUrl, setOutputImageUrl] = useState<string>("");
 
   const handleTextInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTextInput(event.target.value);
@@ -16,12 +18,14 @@ export const Stability = () => {
       inputImageUrl,
       maskImageUrl,
     };
-    const res = await fetch("/api/generate", {
+    const { url } = await fetch("/api/generate", {
       method: "POST",
       body: JSON.stringify(requestBody),
     })
       .then((response) => response.json())
       .catch((error) => console.error("Error fetching data:", error));
+
+    setOutputImageUrl("data:image/jpeg;base64," + url);
   };
 
   return (
@@ -47,8 +51,14 @@ export const Stability = () => {
         imageUrl={maskImageUrl}
         setImageUrl={setMaskImageUrl}
       />
-
-      <button onClick={handleGenerate}>Generate</button>
+      <div>
+        <button onClick={handleGenerate}>Generate</button>
+      </div>
+      <div>
+        {outputImageUrl && (
+          <Image src={outputImageUrl} alt="" height={200} width={200} />
+        )}
+      </div>
     </>
   );
 };
