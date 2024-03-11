@@ -1,0 +1,7 @@
+.crossIcon {
+  height: 1rem;
+  width: 1rem;
+  border: 1px solid black;
+  display: block;
+  float: right;
+}
