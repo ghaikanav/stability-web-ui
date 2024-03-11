@@ -5,26 +5,34 @@ import {
   executeGenerationRequest,
   onGenerationComplete,
 } from "../api/feature/helper";
-import {client,metadata} from "../api/feature/base"
+import { client, metadata } from "../api/feature/base";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const request = buildGenerationRequest("stable-diffusion-xl-1024-v0-9", {
-  type: "image-to-image-masking",
-  initImage: fs.readFileSync("./init_image.png"),
-  maskImage: fs.readFileSync("./mask_image.png"),
-  prompts: [
-    {
-      text: "crayon drawing of rocket ship launching from forest",
-    },
-  ],
-  seed: 44332211,
-  samples: 1,
-  cfgScale: 8,
-  steps: 50,
-  sampler: Generation.DiffusionSampler.SAMPLER_K_DPMPP_2M,
-});
-
-executeGenerationRequest(client, request, metadata)
-  .then(onGenerationComplete)
-  .catch((error) => {
-    console.error("Failed to make image-to-image-masking request:", error);
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const request = buildGenerationRequest("stable-diffusion-xl-1024-v0-9", {
+    type: "image-to-image-masking",
+    initImage: fs.readFileSync("src/sources/rocket.png"),
+    maskImage: fs.readFileSync("src/sources/mask.png"),
+    prompts: [
+      {
+        text: "crayon drawing of rocket ship launching from forest",
+      },
+    ],
+    seed: 44332211,
+    samples: 1,
+    cfgScale: 8,
+    steps: 50,
+    sampler: Generation.DiffusionSampler.SAMPLER_K_DPMPP_2M,
   });
+
+  await executeGenerationRequest(client, request, metadata)
+    .then(onGenerationComplete)
+    .catch((error) => {
+      console.error("Failed to make image-to-image-masking request:", error);
+    });
+
+  res.status(200).json({ message: "Hello from Next.js!" });
+}

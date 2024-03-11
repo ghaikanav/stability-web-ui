@@ -273,7 +273,7 @@ export async function executeGenerationRequest(
         });
       }
     );
-
+    console.log("Answers: ", answers)
     return extractArtifacts(answers);
   } catch (err) {
     return err instanceof Error ? err : new Error(JSON.stringify(err));
@@ -304,6 +304,7 @@ export function onGenerationComplete(response: GenerationResponse) {
     throw response;
   }
 
+  console.log("The reposne is ", response)
   console.log(
     `${response.imageArtifacts.length} image${
       response.imageArtifacts.length > 1 ? "s" : ""

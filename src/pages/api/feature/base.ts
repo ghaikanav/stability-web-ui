@@ -13,5 +13,4 @@ metadata.set("Authorization", "Bearer " + process.env.API_KEY);
 // Create a generation client to use with all future requests
 const client = new GenerationServiceClient("https://grpc.stability.ai", {});
 
-
-export {client,metadata}
+export { client, metadata };
