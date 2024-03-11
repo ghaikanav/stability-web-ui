@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import { ImageInput } from "@/components/ImageInput";
 import Image from "next/image";
+import Head from "next/head";
 
 export const Stability = () => {
   const [inputImageUrl, setInputImageUrl] = useState<string | null>(null);
@@ -30,6 +31,9 @@ export const Stability = () => {
 
   return (
     <>
+      <Head>
+        <title>Stability UI</title>
+      </Head>
       <div>Welcome to stable diffusion!</div>
       <div>
         <input
