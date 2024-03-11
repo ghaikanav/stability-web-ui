@@ -30,11 +30,11 @@ export default async function handler(
         text: promptMessage,
       },
     ],
-    seed: 44332211,
+    seed: 10000,
     samples: 1,
-    cfgScale: 8,
-    steps: 50,
-    sampler: Generation.DiffusionSampler.SAMPLER_K_DPMPP_2M,
+    cfgScale: 10,
+    steps: 70,
+    sampler: Generation.DiffusionSampler.SAMPLER_K_DPMPP_2S_ANCESTRAL,
   });
 
   await executeGenerationRequest(client, request, metadata)
