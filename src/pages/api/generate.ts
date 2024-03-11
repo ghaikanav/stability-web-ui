@@ -14,15 +14,17 @@ export default async function handler(
 ) {
   const {
     promptMessage,
-    imageUrl,
-  }: { promptMessage: string; imageUrl: string } = JSON.parse(req.body);
+    inputImageUrl,
+    maskImageUrl,
+  }: { promptMessage: string; inputImageUrl: string; maskImageUrl: string } =
+    JSON.parse(req.body);
 
-  console.log("body", promptMessage, imageUrl);
+  console.log("body", promptMessage, inputImageUrl, maskImageUrl);
 
   const request = buildGenerationRequest("stable-diffusion-xl-1024-v0-9", {
     type: "image-to-image-masking",
-    initImage: Buffer.from(imageUrl.split(",")[1], "base64"),
-    maskImage: fs.readFileSync("src/sources/mask.png"),
+    initImage: Buffer.from(inputImageUrl.split(",")[1], "base64"),
+    maskImage: Buffer.from(maskImageUrl.split(",")[1], "base64"),
     prompts: [
       {
         text: promptMessage,
