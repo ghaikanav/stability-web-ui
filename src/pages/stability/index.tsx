@@ -49,6 +49,18 @@ export const Stability = () => {
     setTextInput(event.target.value);
   };
 
+  const handleGenerate = async () => {
+
+    const requestBody = 
+    {
+      promptMessage: textInput,
+      imageUrl
+    }
+    const res = await fetch("/api/generate", { method: "POST", body: JSON.stringify(requestBody) })
+      .then((response) => response.json())
+      .catch((error) => console.error("Error fetching data:", error));
+  };
+
   return (
     <>
       <div>Welcome to stable diffusion!</div>
@@ -92,7 +104,7 @@ export const Stability = () => {
         </div>
       )}
 
-      <button>Generate</button>
+      <button onClick={handleGenerate}>Generate</button>
     </>
   );
 };

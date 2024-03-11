@@ -12,13 +12,17 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const { promptMessage, imageUrl } = JSON.parse(req.body);
+
+  console.log("body", promptMessage, imageUrl);
+
   const request = buildGenerationRequest("stable-diffusion-xl-1024-v0-9", {
     type: "image-to-image-masking",
     initImage: fs.readFileSync("src/sources/rocket.png"),
     maskImage: fs.readFileSync("src/sources/mask.png"),
     prompts: [
       {
-        text: "crayon drawing of rocket ship launching from forest",
+        text: promptMessage,
       },
     ],
     seed: 44332211,
